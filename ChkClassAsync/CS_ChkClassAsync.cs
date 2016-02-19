@@ -125,7 +125,8 @@ namespace ChkClassAsync
                 {   // [class]フラグは、true？
                     if (!rsvwrd.Is_class)
                     {   // 評価情報は、非予約語？
-                        // ＬＢＬ情報テーブルに、class名を登録する
+                        // ＬＢＬ情報に、class名を登録する
+                        _result = "C " + _wbuf + _lno.ToString();
                         _Is_class = false;       // [class]フラグ：false
                     }
                 }
@@ -134,6 +135,7 @@ namespace ChkClassAsync
                     if (rsvwrd.Is_class)
                     {   // 評価情報は、"class"？
                         _Is_class = true;       // [class]フラグ：true
+                        _result = "";
                         rsvwrd.Is_class = false;
                     }
                 }
