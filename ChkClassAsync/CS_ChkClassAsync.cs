@@ -126,7 +126,8 @@ namespace ChkClassAsync
                     if (!rsvwrd.Is_class)
                     {   // 評価情報は、非予約語？
                         // ＬＢＬ情報に、class名を登録する
-                        _result = "C " + _wbuf + _lno.ToString();
+                        // _result = "C " + _wbuf + _lno.ToString();
+                        _result = string.Format("C {0} {1,5:D}", _wbuf, _lno);
                         _Is_class = false;       // [class]フラグ：false
                     }
                 }
@@ -154,7 +155,8 @@ namespace ChkClassAsync
                     if (!rsvwrd.Is_class)
                     {   // 評価情報は、非予約語？
                         // ＬＢＬ情報に、class名を登録する
-                        _result = "C " + _wbuf + _lno.ToString();
+                        // _result = "C " + _wbuf + _lno.ToString();
+                        _result = string.Format("C {0} {1,5:D}", _wbuf, _lno);
                         _Is_class = false;       // [class]フラグ：false
                     }
                 }
