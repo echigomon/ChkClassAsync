@@ -134,10 +134,74 @@ namespace ChkClassAsync
                 {   // [class]フラグは、false
                     if (rsvwrd.Is_class)
                     {   // 評価情報は、"class"？
-                        _Is_class = true;       // [class]フラグ：true
                         _result = "";
+                        _Is_class = true;       // [class]フラグ：true
                         rsvwrd.Is_class = false;
                     }
+                }
+            }
+        }
+        public async Task<String> ExecAsync(int lineno, String msg)
+        {   // "class"評価
+            await SetbufAsync(lineno, msg);
+
+            if (!_empty)
+            {   // バッファーに実装有り
+                await rsvwrd.ExecAsync(_wbuf);     // 評価情報の予約語確認を行う
+
+                if (_Is_class)
+                {   // [class]フラグは、true？
+                    if (!rsvwrd.Is_class)
+                    {   // 評価情報は、非予約語？
+                        // ＬＢＬ情報に、class名を登録する
+                        _result = "C " + _wbuf + _lno.ToString();
+                        _Is_class = false;       // [class]フラグ：false
+                    }
+                }
+                else
+                {   // [class]フラグは、false
+                    if (rsvwrd.Is_class)
+                    {   // 評価情報は、"class"？
+                        _result = "";
+                        _Is_class = true;       // [class]フラグ：true
+                        rsvwrd.Is_class = false;
+                    }
+                }
+            }
+
+            return (_result);
+        }
+        #endregion
+
+        #region サブ・モジュール
+        private async Task SetbufAsync(int lineno, String _strbuf)
+        {   // [_wbuf]情報設定
+            _lno = lineno;
+            _wbuf = _strbuf;
+
+            if (_wbuf == null)
+            {   // 設定情報は無し？
+                _empty = true;
+            }
+            else
+            {   // 整形処理を行う
+                // 不要情報削除
+                if (lrskip == null)
+                {   // 未定義？
+                    lrskip = new CS_LRskipAsync();
+                }
+                await lrskip.ExecAsync(_wbuf);
+                _wbuf = lrskip.Wbuf;
+
+                // 作業の為の下処理
+                if (_wbuf.Length == 0 || _wbuf == null)
+                {   // バッファー情報無し
+                    // _wbuf = null;
+                    _empty = true;
+                }
+                else
+                {
+                    _empty = false;
                 }
             }
         }
